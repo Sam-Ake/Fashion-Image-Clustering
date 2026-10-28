@@ -17,7 +17,6 @@ st.markdown(
     "Explore how unsupervised learning groups thousands of diverse fashion items using **ResNet50 feature embeddings**, **PCA**, and **KMeans Clustering**."
 )
 
-
 # Load saved artifacts with caching for performance
 @st.cache_resource
 def load_models():
@@ -25,13 +24,11 @@ def load_models():
     kmeans = joblib.load("kmeans_model.pkl")
     return pca, kmeans
 
-
 @st.cache_data
 def load_data():
     if os.path.exists("clustered_fashion_sample.csv"):
         return pd.read_csv("clustered_fashion_sample.csv")
     return None
-
 
 pca, kmeans = load_models()
 df = load_data()
@@ -68,22 +65,25 @@ else:
         sample_subset = cluster_items.sample(
             num_samples, random_state=42
         ).reset_index(drop=True)
-            
 
-   for i, row in df_cluster.iterrows():
-    img_id = row["id"]
-    with cols[i % 5]:
-        img_path = os.path.join("images_sample", f"{int(img_id)}.jpg")
+        # Create 5 columns for the grid layout
+        cols = st.columns(5)
 
-        if os.path.exists(img_path):
-            img = Image.open(img_path)
-            st.image(
-                img,
-                use_container_width=True,
-                caption=f"{row['masterCategory']}\n{row['subCategory']}",
-            )
-        else:
-            st.info(f"ID {img_id} (Sample mode)")
+        # Display cluster items in a grid using sample_subset
+        for i, row in sample_subset.iterrows():
+            img_id = row["id"]
+            with cols[i % 5]:
+                img_path = os.path.join("images_sample", f"{int(img_id)}.jpg")
+
+                if os.path.exists(img_path):
+                    img = Image.open(img_path)
+                    st.image(
+                        img,
+                        use_container_width=True,
+                        caption=f"{row['masterCategory']}\n{row['subCategory']}",
+                    )
+                else:
+                    st.info(f"ID {img_id} (Sample mode)")
 
     elif option == "Dataset Overview":
         st.subheader("📊 Project Dataset & Pipeline Summary")
