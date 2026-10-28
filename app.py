@@ -72,18 +72,22 @@ else:
         cols = st.columns(5)
         for i, row in sample_subset.iterrows():
             img_id = row["id"]
-            img_path = os.path.join("FASHION-DATASET", "images", f"{img_id}.jpg")
+            image_path = os.path.join("images_sample", f"{image_id}.jpg")
+            
 
             with cols[i % 5]:
-                if os.path.exists(img_path):
-                    img = Image.open(img_path)
-                    st.image(
-                        img,
-                        use_container_width=True,
-                        caption=f"{row['masterCategory']}\n{row['subCategory']}",
-                    )
-                else:
-                    st.text(f"Image ID {img_id} not found locally.")
+    # Update the path to point to your new lightweight sample folder
+    img_path = os.path.join("images_sample", f"{int(img_id)}.jpg")
+
+    if os.path.exists(img_path):
+        img = Image.open(img_path)
+        st.image(
+            img,
+            use_container_width=True,
+            caption=f"{row['masterCategory']}\n{row['subCategory']}",
+        )
+    else:
+        st.info(f"ID {img_id} (Sample mode)")
 
     elif option == "Dataset Overview":
         st.subheader("📊 Project Dataset & Pipeline Summary")
