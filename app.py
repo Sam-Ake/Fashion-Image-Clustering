@@ -75,8 +75,7 @@ else:
             image_path = os.path.join("images_sample", f"{image_id}.jpg")
             
 
-            with cols[i % 5]:
-    # Update the path to point to your new lightweight sample folder
+           with cols[i % 5]:
     img_path = os.path.join("images_sample", f"{int(img_id)}.jpg")
 
     if os.path.exists(img_path):
